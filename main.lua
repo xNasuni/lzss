@@ -120,6 +120,11 @@ local function escape_string(s)
     return result
 end
 
+local function print_compressed(s)
+    local escaped = escape_string(s)
+    print("Compressed: " .. escaped)
+end
+
 local samples = {
     {"empty", ""}, {"single", "a"}, {"double", "ab"}, {"triple", "abc"},
     {"hello", "hello"}, {"aa", "aa"}, {"aaa", "aaa"}, {"aaaa", "aaaa"},
@@ -127,10 +132,8 @@ local samples = {
     {"abcabcabc", "abcabcabc"}, {"helloworld", "helloworld"},
     {"hellohello", "hellohello"}, {"hellox3", "hellohellohello"},
     {"complex", "hellohehahehaihello"}, {"abcx2", "abcdefghijabcdefghij"},
-    {"abcx3", "abcdefghijabcdefghijabcdefghij"}, {
-        "xylong",
-        "xyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxy"
-    }, {"ab128", string.rep("ab", 128)}, {"abc85", string.rep("abc", 85)},
+    {"abcx3", string.rep("abcdefghij", 3)}, {"xylong", string.rep("xy", 50)},
+    {"ab128", string.rep("ab", 128)}, {"abc85", string.rep("abc", 85)},
     {"a255", string.rep("a", 255)}, {"a256", string.rep("a", 256)},
     {"a300", string.rep("a", 300)}, {"abcdef50", string.rep("abcdef", 50)},
     {"xa254", "x" .. string.rep("a", 254)},
@@ -139,20 +142,14 @@ local samples = {
     {"alphabet", "aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz"},
     {"fox", "the quick brown fox jumps over the lazy dog"},
     {"banana", "banana"}, {"banananana", "banananana"},
-    {"ablong", "abababababababababababababababababababababababababababababab"},
-    {"test64", string.rep("test", 64)}, {
-        "azx10",
-        "abcdefghijklmnopqrstuvwxyz" ..
-            string.rep("abcdefghijklmnopqrstuvwxyz", 10)
-    }, {"compx20", "compression" .. string.rep("compression", 20)},
+    {"ablong", string.rep("ab", 30)}, {"test64", string.rep("test", 64)},
+    {"azx10", string.rep("abcdefghijklmnopqrstuvwxyz", 10)},
+    {"compx20", "compression" .. string.rep("compression", 20)},
     {"digits26", string.rep("1234567890", 26)}, {"mississippi", "mississippi"},
     {
         "aaa100",
         "aaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaaa"
-    }, {
-        "mia",
-        "miamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamiamia"
-    }
+    }, {"mia", string.rep("mia", 312)}
 }
 
 local passed = 0
